@@ -1,1 +1,658 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fritzing 1.0.7 – Kostenloser Download</title>
+    <style>
+        :root {
+            --primary: #c2185b;
+            --primary-dark: #8c0032;
+            --bg: #fafafa;
+            --card-bg: #ffffff;
+            --text: #212121;
+            --text-secondary: #616161;
+            --border: #e0e0e0;
+            --linux: #f5b800;
+            --mac: #1e1e1e;
+            --windows: #0078d4;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .language-selector select {
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: white;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 1.2em;
+            padding-right: 2.5rem;
+        }
+
+        .language-selector select:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem 3.5rem;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            margin-bottom: 2rem;
+        }
+
+        .header .fritzing-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .version-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-top: 1rem;
+        }
+
+        /* Info Banner */
+        .info-banner {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 1rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-banner .icon {
+            font-size: 1.3rem;
+        }
+
+        /* Download Cards */
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .download-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem 1.8rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .download-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .download-card .os-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+            display: block;
+            object-fit: contain;
+        }
+
+        .download-card h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .download-card .os-detail {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            letter-spacing: 0.3px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .download-btn.linux-btn {
+            background: var(--linux);
+            color: #1a1a1a;
+        }
+
+        .download-btn.linux-btn:hover {
+            background: #d4a000;
+        }
+
+        .download-btn.mac-btn {
+            background: var(--mac);
+        }
+
+        .download-btn.mac-btn:hover {
+            background: #333333;
+        }
+
+        .download-btn.windows-btn {
+            background: var(--windows);
+        }
+
+        .download-btn.windows-btn:hover {
+            background: #0060b0;
+        }
+
+        .file-type {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* Feature Highlight */
+        .mac-native-note {
+            background: #fff3e0;
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid #ffcc80;
+            font-size: 1.05rem;
+        }
+
+        .mac-native-note .icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a2e;
+            color: #aaa;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        .footer a {
+            color: #ddd;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .download-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header {
+                padding: 2rem 1rem 2.5rem;
+            }
+
+            .header .fritzing-logo {
+                width: 80px;
+                height: 80px;
+            }
+
+            .download-card {
+                padding: 1.5rem 1.2rem;
+            }
+
+            .download-card .os-logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            .language-selector {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .language-selector select {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.85rem;
+                padding-right: 2rem;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .download-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .download-card:last-child {
+                grid-column: span 2;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select id="languageSelect" aria-label="Sprache auswählen">
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="it">🇮🇹 Italiano</option>
+            <option value="pt">🇵🇹 Português</option>
+            <option value="nl">🇳🇱 Nederlands</option>
+            <option value="pl">🇵🇱 Polski</option>
+            <option value="tr">🇹🇷 Türkçe</option>
+            <option value="ru">🇷🇺 Русский</option>
+        </select>
+    </div>
+
+    <div class="header">
+        <img src="fritzing.png" alt="Fritzing Logo" class="fritzing-logo">
+        <h1 data-translate="title">Fritzing</h1>
+        <span class="version-badge" data-translate="version">Version 1.0.7</span>
+        <p data-translate="subtitle">Kostenloser Download für alle Plattformen</p>
+    </div>
+
+    <div class="container">
+        <!-- Info Banner -->
+        <div class="info-banner">
+            <span class="icon">✅</span>
+            <span data-translate="free_banner"><strong>Alle Downloads sind kostenlos</strong> – Open Source & Community-getrieben.</span>
+        </div>
+
+        <!-- Download Cards -->
+        <div class="download-grid">
+            <!-- Linux -->
+            <div class="download-card">
+                <img src="linux.png" alt="Linux Logo" class="os-logo">
+                <h2 data-translate="linux">Linux</h2>
+                <p class="os-detail" data-translate="linux_detail">AppImage – einfach ausführen</p>
+                <a href="https://github.com/lzwdev/Fritzing-Software/releases/download/v1.0.7/Linux-Fritzing-1.0.7.AppImage" 
+                   class="download-btn linux-btn" 
+                   download>
+                    <span data-translate="download">⬇️ Download</span> <span data-translate="linux">Linux</span>
+                </a>
+                <div class="file-type">📦 .AppImage</div>
+            </div>
+
+            <!-- macOS -->
+            <div class="download-card">
+                <img src="apple.png" alt="Apple Logo" class="os-logo">
+                <h2 data-translate="macos">macOS</h2>
+                <p class="os-detail" data-translate="macos_detail">Läuft nativ auf Apple Silicon & Intel</p>
+                <a href="https://github.com/lzwdev/Fritzing-Software/releases/download/v1.0.7/MacOS-Fritzing-1.0.7.dmg" 
+                   class="download-btn mac-btn" 
+                   download>
+                    <span data-translate="download">⬇️ Download</span> <span data-translate="macos">macOS</span>
+                </a>
+                <div class="file-type">📦 .dmg</div>
+            </div>
+
+            <!-- Windows -->
+            <div class="download-card">
+                <img src="windows.png" alt="Windows Logo" class="os-logo">
+                <h2 data-translate="windows">Windows</h2>
+                <p class="os-detail" data-translate="windows_detail">Installationspaket für alle Versionen</p>
+                <a href="https://github.com/lzwdev/Fritzing-Software/releases/download/v1.0.7/Windows-Fritzing-1.0.7.msi" 
+                   class="download-btn windows-btn" 
+                   download>
+                    <span data-translate="download">⬇️ Download</span> <span data-translate="windows">Windows</span>
+                </a>
+                <div class="file-type">📦 .msi</div>
+            </div>
+        </div>
+
+        <!-- macOS Native Note -->
+        <div class="mac-native-note">
+            <span class="icon">✨</span>
+            <div data-translate="mac_native">
+                <strong>Neu in Version 1.0.7:</strong> Fritzing läuft jetzt <strong>nativ auf macOS</strong> – 
+                sowohl auf Apple Silicon (M1/M2/M3) als auch auf Intel-Macs. Kein Rosetta-Emulator mehr nötig!
+            </div>
+        </div>
+
+        <!-- Zusätzliche Infos -->
+        <div style="text-align: center; margin-bottom: 2rem; color: var(--text-secondary); font-size: 0.95rem;">
+            <p data-translate="github_note">🔒 Alle Dateien werden direkt von GitHub Releases bereitgestellt.</p>
+            <p style="margin-top: 0.5rem;">📋 <a href="https://github.com/lzwdev/Fritzing-Software/releases" 
+               style="color: var(--primary); text-decoration: none; font-weight: 500;" 
+               data-translate="all_releases">Alle Releases ansehen</a></p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><span data-translate="footer_text">Fritzing ist ein Open-Source-Projekt</span> – <a href="https://fritzing.org" target="_blank">fritzing.org</a></p>
+        <p style="margin-top: 0.3rem; font-size: 0.85rem;" data-translate="footer_version">Version 1.0.7 – Kostenlos für alle Nutzer</p>
+    </div>
+
+    <script>
+        const translations = {
+            de: {
+                title: "Fritzing",
+                version: "Version 1.0.7",
+                subtitle: "Kostenloser Download für alle Plattformen",
+                free_banner: "<strong>Alle Downloads sind kostenlos</strong> – Open Source & Community-getrieben.",
+                linux: "Linux",
+                linux_detail: "AppImage – einfach ausführen",
+                macos: "macOS",
+                macos_detail: "Läuft nativ auf Apple Silicon & Intel",
+                windows: "Windows",
+                windows_detail: "Installationspaket für alle Versionen",
+                download: "⬇️ Download",
+                mac_native: "<strong>Neu in Version 1.0.7:</strong> Fritzing läuft jetzt <strong>nativ auf macOS</strong> – sowohl auf Apple Silicon (M1/M2/M3) als auch auf Intel-Macs. Kein Rosetta-Emulator mehr nötig!",
+                github_note: "🔒 Alle Dateien werden direkt von GitHub Releases bereitgestellt.",
+                all_releases: "Alle Releases ansehen",
+                footer_text: "Fritzing ist ein Open-Source-Projekt",
+                footer_version: "Version 1.0.7 – Kostenlos für alle Nutzer"
+            },
+            en: {
+                title: "Fritzing",
+                version: "Version 1.0.7",
+                subtitle: "Free download for all platforms",
+                free_banner: "<strong>All downloads are free</strong> – Open Source & community-driven.",
+                linux: "Linux",
+                linux_detail: "AppImage – just run it",
+                macos: "macOS",
+                macos_detail: "Runs natively on Apple Silicon & Intel",
+                windows: "Windows",
+                windows_detail: "Installation package for all versions",
+                download: "⬇️ Download",
+                mac_native: "<strong>New in Version 1.0.7:</strong> Fritzing now runs <strong>natively on macOS</strong> – on both Apple Silicon (M1/M2/M3) and Intel Macs. No more Rosetta emulator needed!",
+                github_note: "🔒 All files are provided directly from GitHub Releases.",
+                all_releases: "View all releases",
+                footer_text: "Fritzing is an open-source project",
+                footer_version: "Version 1.0.7 – Free for all users"
+            },
+            es: {
+                title: "Fritzing",
+                version: "Versión 1.0.7",
+                subtitle: "Descarga gratuita para todas las plataformas",
+                free_banner: "<strong>Todas las descargas son gratuitas</strong> – Código abierto e impulsado por la comunidad.",
+                linux: "Linux",
+                linux_detail: "AppImage – simplemente ejecutar",
+                macos: "macOS",
+                macos_detail: "Funciona de forma nativa en Apple Silicon e Intel",
+                windows: "Windows",
+                windows_detail: "Paquete de instalación para todas las versiones",
+                download: "⬇️ Descargar",
+                mac_native: "<strong>Nuevo en la versión 1.0.7:</strong> Fritzing ahora funciona <strong>de forma nativa en macOS</strong> – tanto en Apple Silicon (M1/M2/M3) como en Macs Intel. ¡Ya no se necesita el emulador Rosetta!",
+                github_note: "🔒 Todos los archivos se proporcionan directamente desde GitHub Releases.",
+                all_releases: "Ver todas las versiones",
+                footer_text: "Fritzing es un proyecto de código abierto",
+                footer_version: "Versión 1.0.7 – Gratis para todos los usuarios"
+            },
+            fr: {
+                title: "Fritzing",
+                version: "Version 1.0.7",
+                subtitle: "Téléchargement gratuit pour toutes les plateformes",
+                free_banner: "<strong>Tous les téléchargements sont gratuits</strong> – Open Source et piloté par la communauté.",
+                linux: "Linux",
+                linux_detail: "AppImage – il suffit de l'exécuter",
+                macos: "macOS",
+                macos_detail: "Fonctionne nativement sur Apple Silicon et Intel",
+                windows: "Windows",
+                windows_detail: "Package d'installation pour toutes les versions",
+                download: "⬇️ Télécharger",
+                mac_native: "<strong>Nouveau dans la version 1.0.7 :</strong> Fritzing fonctionne désormais <strong>nativement sur macOS</strong> – à la fois sur Apple Silicon (M1/M2/M3) et sur les Mac Intel. Plus besoin de l'émulateur Rosetta !",
+                github_note: "🔒 Tous les fichiers sont fournis directement depuis GitHub Releases.",
+                all_releases: "Voir toutes les versions",
+                footer_text: "Fritzing est un projet open-source",
+                footer_version: "Version 1.0.7 – Gratuit pour tous les utilisateurs"
+            },
+            it: {
+                title: "Fritzing",
+                version: "Versione 1.0.7",
+                subtitle: "Download gratuito per tutte le piattaforme",
+                free_banner: "<strong>Tutti i download sono gratuiti</strong> – Open Source e guidato dalla comunità.",
+                linux: "Linux",
+                linux_detail: "AppImage – basta eseguirlo",
+                macos: "macOS",
+                macos_detail: "Funziona nativamente su Apple Silicon e Intel",
+                windows: "Windows",
+                windows_detail: "Pacchetto di installazione per tutte le versioni",
+                download: "⬇️ Scarica",
+                mac_native: "<strong>Novità nella versione 1.0.7:</strong> Fritzing ora funziona <strong>nativamente su macOS</strong> – sia su Apple Silicon (M1/M2/M3) che su Mac Intel. Non serve più l'emulatore Rosetta!",
+                github_note: "🔒 Tutti i file vengono forniti direttamente da GitHub Releases.",
+                all_releases: "Vedi tutte le versioni",
+                footer_text: "Fritzing è un progetto open-source",
+                footer_version: "Versione 1.0.7 – Gratuita per tutti gli utenti"
+            },
+            pt: {
+                title: "Fritzing",
+                version: "Versão 1.0.7",
+                subtitle: "Download gratuito para todas as plataformas",
+                free_banner: "<strong>Todos os downloads são gratuitos</strong> – Open Source e impulsionado pela comunidade.",
+                linux: "Linux",
+                linux_detail: "AppImage – basta executar",
+                macos: "macOS",
+                macos_detail: "Funciona nativamente em Apple Silicon e Intel",
+                windows: "Windows",
+                windows_detail: "Pacote de instalação para todas as versões",
+                download: "⬇️ Baixar",
+                mac_native: "<strong>Novo na versão 1.0.7:</strong> O Fritzing agora funciona <strong>nativamente no macOS</strong> – tanto em Apple Silicon (M1/M2/M3) quanto em Macs Intel. Não é mais necessário o emulador Rosetta!",
+                github_note: "🔒 Todos os arquivos são fornecidos diretamente do GitHub Releases.",
+                all_releases: "Ver todas as versões",
+                footer_text: "O Fritzing é um projeto open-source",
+                footer_version: "Versão 1.0.7 – Grátis para todos os usuários"
+            },
+            nl: {
+                title: "Fritzing",
+                version: "Versie 1.0.7",
+                subtitle: "Gratis download voor alle platforms",
+                free_banner: "<strong>Alle downloads zijn gratis</strong> – Open Source & community-gedreven.",
+                linux: "Linux",
+                linux_detail: "AppImage – gewoon uitvoeren",
+                macos: "macOS",
+                macos_detail: "Draait native op Apple Silicon & Intel",
+                windows: "Windows",
+                windows_detail: "Installatiepakket voor alle versies",
+                download: "⬇️ Downloaden",
+                mac_native: "<strong>Nieuw in versie 1.0.7:</strong> Fritzing draait nu <strong>native op macOS</strong> – zowel op Apple Silicon (M1/M2/M3) als op Intel Macs. Geen Rosetta-emulator meer nodig!",
+                github_note: "🔒 Alle bestanden worden rechtstreeks vanuit GitHub Releases geleverd.",
+                all_releases: "Alle releases bekijken",
+                footer_text: "Fritzing is een open-sourceproject",
+                footer_version: "Versie 1.0.7 – Gratis voor alle gebruikers"
+            },
+            pl: {
+                title: "Fritzing",
+                version: "Wersja 1.0.7",
+                subtitle: "Darmowe pobieranie na wszystkie platformy",
+                free_banner: "<strong>Wszystkie pobrania są darmowe</strong> – Open Source i napędzane przez społeczność.",
+                linux: "Linux",
+                linux_detail: "AppImage – po prostu uruchom",
+                macos: "macOS",
+                macos_detail: "Działa natywnie na Apple Silicon i Intel",
+                windows: "Windows",
+                windows_detail: "Pakiet instalacyjny dla wszystkich wersji",
+                download: "⬇️ Pobierz",
+                mac_native: "<strong>Nowość w wersji 1.0.7:</strong> Fritzing działa teraz <strong>natywnie na macOS</strong> – zarówno na Apple Silicon (M1/M2/M3), jak i na Macach Intel. Koniec z emulatorem Rosetta!",
+                github_note: "🔒 Wszystkie pliki są dostarczane bezpośrednio z GitHub Releases.",
+                all_releases: "Zobacz wszystkie wersje",
+                footer_text: "Fritzing to projekt open-source",
+                footer_version: "Wersja 1.0.7 – Darmowa dla wszystkich użytkowników"
+            },
+            tr: {
+                title: "Fritzing",
+                version: "Sürüm 1.0.7",
+                subtitle: "Tüm platformlar için ücretsiz indirme",
+                free_banner: "<strong>Tüm indirmeler ücretsizdir</strong> – Açık Kaynak ve topluluk odaklı.",
+                linux: "Linux",
+                linux_detail: "AppImage – sadece çalıştırın",
+                macos: "macOS",
+                macos_detail: "Apple Silicon ve Intel'de yerel olarak çalışır",
+                windows: "Windows",
+                windows_detail: "Tüm sürümler için kurulum paketi",
+                download: "⬇️ İndir",
+                mac_native: "<strong>Sürüm 1.0.7'de yeni:</strong> Fritzing artık <strong>macOS'ta yerel olarak çalışıyor</strong> – hem Apple Silicon (M1/M2/M3) hem de Intel Mac'lerde. Rosetta emülatörüne artık gerek yok!",
+                github_note: "🔒 Tüm dosyalar doğrudan GitHub Releases'ten sağlanmaktadır.",
+                all_releases: "Tüm sürümleri görüntüle",
+                footer_text: "Fritzing açık kaynaklı bir projedir",
+                footer_version: "Sürüm 1.0.7 – Tüm kullanıcılar için ücretsiz"
+            },
+            ru: {
+                title: "Fritzing",
+                version: "Версия 1.0.7",
+                subtitle: "Бесплатная загрузка для всех платформ",
+                free_banner: "<strong>Все загрузки бесплатны</strong> – Открытый исходный код и поддержка сообщества.",
+                linux: "Linux",
+                linux_detail: "AppImage – просто запустите",
+                macos: "macOS",
+                macos_detail: "Работает нативно на Apple Silicon и Intel",
+                windows: "Windows",
+                windows_detail: "Установочный пакет для всех версий",
+                download: "⬇️ Скачать",
+                mac_native: "<strong>Новое в версии 1.0.7:</strong> Fritzing теперь работает <strong>нативно на macOS</strong> – как на Apple Silicon (M1/M2/M3), так и на Intel Mac. Эмулятор Rosetta больше не нужен!",
+                github_note: "🔒 Все файлы предоставляются напрямую из GitHub Releases.",
+                all_releases: "Посмотреть все версии",
+                footer_text: "Fritzing – проект с открытым исходным кодом",
+                footer_version: "Версия 1.0.7 – Бесплатно для всех пользователей"
+            }
+        };
+
+        // Sprachumschalter
+        document.getElementById('languageSelect').addEventListener('change', function(e) {
+            const lang = e.target.value;
+            changeLanguage(lang);
+            // Sprache im localStorage speichern
+            localStorage.setItem('preferredLanguage', lang);
+        });
+
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-translate]');
+            
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+            
+            // HTML lang Attribut aktualisieren
+            document.documentElement.lang = lang;
+            
+            // Seitentitel aktualisieren
+            if (lang === 'de') {
+                document.title = "Fritzing 1.0.7 – Kostenloser Download";
+            } else if (lang === 'en') {
+                document.title = "Fritzing 1.0.7 – Free Download";
+            } else if (lang === 'es') {
+                document.title = "Fritzing 1.0.7 – Descarga gratuita";
+            } else if (lang === 'fr') {
+                document.title = "Fritzing 1.0.7 – Téléchargement gratuit";
+            } else if (lang === 'it') {
+                document.title = "Fritzing 1.0.7 – Download gratuito";
+            } else if (lang === 'pt') {
+                document.title = "Fritzing 1.0.7 – Download gratuito";
+            } else if (lang === 'nl') {
+                document.title = "Fritzing 1.0.7 – Gratis downloaden";
+            } else if (lang === 'pl') {
+                document.title = "Fritzing 1.0.7 – Darmowe pobieranie";
+            } else if (lang === 'tr') {
+                document.title = "Fritzing 1.0.7 – Ücretsiz indirme";
+            } else if (lang === 'ru') {
+                document.title = "Fritzing 1.0.7 – Бесплатная загрузка";
+            }
+        }
+
+        // Beim Laden die gespeicherte Sprache wiederherstellen
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLanguage = localStorage.getItem('preferredLanguage') || 'de';
+            document.getElementById('languageSelect').value = savedLanguage;
+            changeLanguage(savedLanguage);
+        });
+    </script>
+
+</body>
+</html>
